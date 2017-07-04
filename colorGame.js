@@ -1,10 +1,4 @@
-var squares = document.querySelectorAll(".square");
-var display = document.getElementById("display");
-var message = document.getElementById("message");
-var h1 = document.querySelector("h1");
-var resetButton = document.querySelector("#reset");
-var modeButtons = document.querySelectorAll(".mode");
-var difficulty = 6;
+var difficulty = 9;
 var colors = [];
 var pickColor;
 
@@ -13,45 +7,49 @@ init();
 function init(){
 	setModeButtons();
 	setSquares();
-	resetButton.addEventListener("click", resetGame);
+	$("#reset").click(resetGame);
 	resetGame();
 }
 
 function setModeButtons(){
-	for (var i = modeButtons.length - 1; i >= 0; i--) {
-		modeButtons[i].addEventListener("click", function(){
-			modeButtons[0].classList.remove("selected");
-			modeButtons[1].classList.remove("selected");
-			this.classList.add("selected");
-			this.textContent == "Easy" ? difficulty = 3: difficulty = 6;
+	$(".mode").each(function(index,button){
+		$(this).click(function(){
+			$(".mode").removeClass("selected");
+			$(this).addClass("selected");
+			if ($(this).text()=="Easy"){
+					difficulty = 3;
+				} else if ($(this).text() == "Medium"){
+					difficulty = 6;
+				}
+				else{
+					difficulty = 9;
+				}
 			resetGame();
 		});
-	}
+	});
 }
 
 function setSquares(){
-	for (var i = squares.length - 1; i >= 0; i--) {
-		squares[i].addEventListener("click",function(){
-			var clicked = this.style.backgroundColor;
+	$(".square").each(function(index,square){
+		$(this).click(function(){
+			var clicked = $(this).css("backgroundColor");
 			if(clicked == picked){
-				message.textContent = "Correct!";
-				resetButton.textContent = "Play Again?";
+				$("#message").text("Correct!");
+				$("#reset").text("Play Again?");
 				changeColors(clicked);
 			}
 			else{
-				message.textContent = "Wrong...";
-				this.style.backgroundColor = "#232323";
+				$("#message").text("Wrong...");
+				$(this).css("backgroundColor", "#232323");
 			}
 		});
-	}
+	});
 }
 
 function changeColors(color){
-	for (var i = squares.length - 1; i >= 0; i--) {
-		squares[i].style.backgroundColor = color;
-	}
-	h1.style.backgroundColor = color;
-	$("button").css("color", "color");
+	$(".square").css("backgroundColor",color);
+	$("h1").css("backgroundColor", color);
+	$("button").css("color", color);
 	$("button:hover").css("color", "white");
 	$("button:hover").css("backgroundColor", color);
 	// for (var i = modeButtons.length - 1; i >= 0; i--) {
@@ -90,17 +88,17 @@ function randomColor(){
 function resetGame(){
 	colors = generateColors(difficulty);
 	picked = pickColor();
-	display.textContent = picked;
+	$("#display").text(picked);
 	changeColors("steelblue");
-		for (var i = squares.length - 1; i >= 0; i--) {
-		if(colors[i]){
-			squares[i].style.backgroundColor = colors[i];
-			squares[i].style.display = "block";
+	$(".square").each(function(index,square) {
+		if(colors[index]){
+			$(this).css("backgroundColor", colors[index]);
+			$(this).css("visibility","visible");
 		}
 		else{
-			squares[i].style.display = "none";
+			$(this).css("visibility","hidden");
 		}
-	}
-	resetButton.textContent = "New Colors";
-	message.textContent = "Go!";
+	});
+	$("#reset").text("New Colors");
+	$("#message").text("Go!");
 }
