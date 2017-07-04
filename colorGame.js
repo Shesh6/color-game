@@ -50,16 +50,18 @@ function changeColors(color){
 	$(".square").css("backgroundColor",color);
 	$("h1").css("backgroundColor", color);
 	$("button").css("color", color);
-	$("button:hover").css("color", "white");
-	$("button:hover").css("backgroundColor", color);
-	// for (var i = modeButtons.length - 1; i >= 0; i--) {
-	// 	if(modeButtons[i].classList.contains("selected")){
-	// 		modeButtons[i].style.backgroundColor = color;
-	// 	}
-	// 	else{
-	// 		modeButtons[i].style.color = color;
-	// 	}
-	// }
+	$("button").css("backgroundColor", "white");
+	$(".selected").css("color", "white");
+	$(".selected").css("backgroundColor", color);
+	$("button:not(.selected)").hover(function(){
+		$(this).css("backgroundColor", color);
+		$(this).css("color", "white");
+	}, function(){
+		if ($(this).hasClass("selected") == false){
+			$(this).css("backgroundColor", "white");
+			$(this).css("color", color);
+		}
+	});
 }
 
 function pickColor(){
